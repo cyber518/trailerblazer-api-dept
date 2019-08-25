@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 
 //Assign routes to paths
 app.use('/search', searchRouter);
-app.use('/api/user', authRRouter);
+app.use('/user', authRRouter);
 
 //Handle errors
 app.use((req, res, next) => {

@@ -4,10 +4,10 @@ A movie trailer API project that serves Youtube video trailer ID's and titles fo
 
 ## Server Responses
 
-200 OK - The request was successful.
-400 Bad Request - The request could not be understood or was missing required parameters.
-401 Unauthorized - Authentication failed.
-404 Not Found - Resource was not found.
+200 OK - The request was successful.  
+400 Bad Request - The request could not be understood or was missing required parameters.  
+401 Unauthorized - Authentication failed.  
+404 Not Found - Resource was not found.  
 
 ## User creation
 
@@ -16,18 +16,18 @@ Without Authorization, there is no way to get result from API.
 
 Here is a sample JSON body for user creation request:
 
-Method: `POST`
-URL: https://trailerblazer.herokuapp.com/user/register
-Body: 
-`{
-  "name": "John Doe",
-  "email": "johndoe@email.com",
-  "password": "123456789"
+Method: `POST`  
+URL: https://trailerblazer.herokuapp.com/user/register  
+Body:  
+`{  
+  "name": "John Doe",  
+  "email": "johndoe@email.com",  
+  "password": "123456789"  
 }`
 
 Sample response on success:
 
-`{
+`{  
   "user": "<<user_id>>"
 }`
 
@@ -36,12 +36,12 @@ Sample response on success:
 Before making API calls to get Youtube trai videos, users should get Authorization token with registered user. Here is a sample login
 flow to get authorization token:
 
-Method: `POST`
-URL: https://trailerblazer.herokuapp.com/user/login
-Body:
-`{
-  "email": "johndoe@email.com",
-  "password": "123456789"
+Method: `POST`  
+URL: https://trailerblazer.herokuapp.com/user/login  
+Body:  
+`{  
+  "email": "johndoe@email.com",  
+  "password": "123456789"  
 }`
 
 Sample response on success:
@@ -52,18 +52,18 @@ Sample response on success:
 
 After getting authorization token, there is just last one step to do, make a API call with search string. Here is a sample request:
 
-URL: https://trailerblazer.herokuapp.com/search?movie=harry+potter
-METHOD: `GET`
-Header: `Authorization: <<token>>`
-Result Structure: 
+URL: https://trailerblazer.herokuapp.com/search?movie=harry+potter  
+METHOD: `GET`  
+Header: `Authorization: <<token>>`  
+Result Structure:   
 `
-[
-  {
-    "name": "",
-    "year": "",
-    "imdbID: "",
-    "image": "",
-    "youtubeID": ""
-  }
+[  
+  {  
+    "name": "",  
+    "year": "",  
+    "imdbID: "",  
+    "image": "",  
+    "youtubeID": ""  
+  }  
 ]
 `

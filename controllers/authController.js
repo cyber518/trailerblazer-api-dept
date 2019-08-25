@@ -11,14 +11,20 @@ module.exports.auth_register_post = async function (req, res, next) {
 
     //Check if error accoured
     if (!errors.isEmpty()) {
-        res.status(400).send(errors);
+        res.status(400).json({
+            error: errors,
+            status: 400
+        });
     }
 
     //Check if provided email exists on database
     var isEmailExists = await User.findOne({email: req.body.email});
     //Return error if email already exists on database
     if (isEmailExists) {
-        return res.status(400).send('Email already exists');
+        return res.status(400).json({
+            message: 'Email already exists',
+            status: 400
+        });
     }
 
     //Hash the password for security
@@ -52,12 +58,18 @@ module.exports.auth_login_post = async function (req, res, next) {
 
     var user = await User.findOne({email: req.body.email});
     if (!user) {
-        return res.send(400).send('Email or password is wrong');
+        return res.status(401).json({
+            message: 'Email or password is wrong',
+            error: 401
+        });
     }
 
     var isPasswordValid = await bcrypt.compare(req.body.password, user.password);
     if (!isPasswordValid) {
-        return res.status(400).send('Email or password is wrong');
+        return res.status(401).json({
+            message: 'Email or password is wrong',
+            error: 401
+        });
     }
 
     var token = jwt.sign({_id: user._id}, process.env.SECRET);

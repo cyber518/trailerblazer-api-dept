@@ -20,15 +20,15 @@ Method: `POST`
 URL: https://trailerblazer.herokuapp.com/user/register  
 Body:  
 `{  
-  "name": "John Doe",  
-  "email": "johndoe@email.com",  
-  "password": "123456789"  
+    "name": "John Doe",  
+    "email": "johndoe@email.com",  
+    "password": "123456789"  
 }`
 
 Sample response on success:
 
 `{  
-  "user": "<<user_id>>"
+    "user": "<<user_id>>"
 }`
 
 ## Get Authorization Token
@@ -40,8 +40,8 @@ Method: `POST`
 URL: https://trailerblazer.herokuapp.com/user/login  
 Body:  
 `{  
-  "email": "johndoe@email.com",  
-  "password": "123456789"  
+    "email": "johndoe@email.com",  
+    "password": "123456789"  
 }`
 
 Sample response on success:
@@ -58,12 +58,12 @@ Header: `Authorization: <<token>>`
 Result Structure:   
 `
 [  
-  {  
-    "name": "",  
-    "year": "",  
-    "imdbID: "",  
-    "image": "",  
-    "youtubeID": ""  
-  }  
+    {  
+        "name": "",  
+        "year": "",  
+        "imdbID: "",  
+        "image": "",  
+        "youtubeID": ""  
+    }  
 ]
 `

@@ -10,7 +10,7 @@ dotEnv.config({
 });
 
 //Connect to mongoose
-mongoose.connect(process.env.DB_CONNECT, () => {
+mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () => {
     console.log('Connected to MongoDB Cloud Database');
 });
 

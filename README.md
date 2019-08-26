@@ -73,12 +73,12 @@ Result Structure:
 2) Open Command Prompt in the project location adn type `npm install`  
 3) After all packages installed, creat `.env` file under main folder. And put following required keys as template:  
 
-`
-DB_CONNECT = <<mongodb server url>>  
+
+DB_CONNECT = <<mongodb server url>>   
 OMDB_API_KEY = <<omdb api key>>  
 PORT = <<port to run project>>  
 SECRET = <<secret that used to hash users password>>  
 YOUTUBE_API_KEY = <<youtube api key>>  
-`
+
 
 4) After creating the file, on Command Prompt type `node app.js` or `nodemon app.js` if you are using nodemon to run apps.

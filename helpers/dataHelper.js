@@ -2,6 +2,10 @@
 const axios = require('axios');
 const similarity = require('string-similarity');
 const forbiddenWords = ['game', 'launch', 'book', 'reveal'];
+const urls = {
+    omdbURL: 'http://www.omdbapi.com/',
+    youtube: 'https://www.googleapis.com/youtube/v3/'
+};
 
 module.exports = {
     /**
@@ -15,7 +19,7 @@ module.exports = {
         try {
             var finalObject = [];
             //Define URl
-            var url = 'http://www.omdbapi.com/?apikey=' + process.env.OMDB_API_KEY + '&type=movie&s=' + query.split(' ').join('+');
+            var url = urls.omdbURL + '?apikey=' + process.env.OMDB_API_KEY + '&type=movie&s=' + query.split(' ').join('+');
 
             //Make request to defined URL and return the result
             return axios.get(url).then(async response => {
@@ -69,36 +73,29 @@ module.exports = {
  */
 function getVideoInfo(movieName, movieYear) {
     //Define proper URL for call
-    var url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=' + movieName.replace(/[^A-Za-z0-9\s!?-]/g, "").replace(/ /g, "+").toLowerCase() + '+trailer+official+' + movieYear +'&type=video&key=' + process.env.YOUTUBE_API_KEY + '&fields=items/id/videoId,items/snippet/title'
-    console.log(url);
+    var url = urls.youtube + 'search?part=snippet&maxResults=10&q=' + movieName.replace(/[^A-Za-z0-9\s!?-]/g, "").replace(/ /g, "+").toLowerCase() + '+trailer+official+' + movieYear +'&type=video&key=' + process.env.YOUTUBE_API_KEY + '&fields=items/id/videoId,items/snippet/title'
+ 
     //Make the call for specified URL and return specific result
     return axios.get(url).then(response => {
-
+        //Define necessary variables
         var videoID = null;
         var result = 0;
         var tempSimilarityResult = 0;
         var compareString = movieName + ' trailer official';
-        var isForbiddenTitle;
 
+        //Loop all Youtube videos
         for (var i = 0; i < response.data.items.length; i++) {
-            isForbiddenTitle = false;
-
-            //TODO: Get rid of nested loops for best practice
-            for (var j = 0; j < forbiddenWords.length; j++) {
-                if (movieName.toLowerCase().indexOf(forbiddenWords[j]) === -1  && response.data.items[i].snippet.title.toLowerCase().indexOf(forbiddenWords[j]) !== -1) {
-                    isForbiddenTitle = true;
-                    break;
-                }
-            }
+            //Check if Youtube video title contains forbidden words
+            var isForbiddenTitle = checkForbiddenWords(movieName, response.data.items[i].snippet.title);
 
             if (isForbiddenTitle) {
                 continue;
             }
 
+            //Check the similarity percantage of movie name and Youtube video title
             tempSimilarityResult = similarity.compareTwoStrings(compareString.toLowerCase(), response.data.items[i].snippet.title.toLowerCase());
-            console.log(movieName + ' trailer ' + movieYear + ' - ' + response.data.items[i].snippet.title);
-            console.log(tempSimilarityResult);
-            console.log(' ');
+            
+            //Don't put the video URL to variable if similarity is equal or under 60%
             if (tempSimilarityResult > 0.6 && tempSimilarityResult > result) {
                 result = tempSimilarityResult;
                 videoID = response.data.items[i].id.videoId;
@@ -106,4 +103,27 @@ function getVideoInfo(movieName, movieYear) {
         }
         return videoID;
     });
+}
+
+/**
+ * Checks if provided Youtube video title has forbidden words
+ *
+ * @param {String} movieName - Required movie's name
+ * @param {String} youtubeTitle - Youtube video's title
+ * @return {Boolean} result of forbidden check
+ *
+ */
+function checkForbiddenWords(movieName, youtubeTitle) {
+    //Set default value
+    var isForbiddenTitle = false;
+
+    //Loop the words and check
+    for (var j = 0; j < forbiddenWords.length; j++) {
+        if (movieName.toLowerCase().indexOf(forbiddenWords[j]) === -1  && youtubeTitle.toLowerCase().indexOf(forbiddenWords[j]) !== -1) {
+            isForbiddenTitle = true;
+            break;
+        }
+    }
+
+    return isForbiddenTitle;
 }
